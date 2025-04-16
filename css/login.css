@@ -1,0 +1,109 @@
+body {
+  background-color: #fafafa;
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+}
+
+h1 {
+  color: #342f2d;
+  align-items: center;
+  font-weight: bold;
+  text-align: center;
+}
+
+button {
+  background-color: #856d5c;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+  background-color: #342f2d;
+  transform: scale(1.05);
+}
+
+form {
+  width: 300px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+p {
+  text-align: center;
+  margin-top: 10px;
+}
+
+p a button {
+  background-color: #856d5c;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+p a button:hover {
+  background-color: #342f2d;
+}
+
+.navbar {
+  display: flex;
+  font-family: "Montserrat", sans-serif;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #eaeaea;
+}
+
+.navbar .logo img {
+  display: block;
+  width: 100px;
+  height: auto;
+}
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar .nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+  color: #555;
+}
+
+.navbar .nav-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar .nav-icons img {
+  width: 24px;
+  height: 24px;
+}

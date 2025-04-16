@@ -1,0 +1,99 @@
+/* General Reset */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+/* Main Content */
+h2 {
+  color: #333;
+  margin-top: 30px;
+}
+
+/* Group List */
+.group-links a {
+  display: block;
+  background: #3498db;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  margin: 10px auto;
+  width: 200px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.group-links a:hover {
+  background: #2980b9;
+}
+
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+  margin: 20px auto;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+input[type="submit"]:hover {
+  background: #27ae60;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #342f2d;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.sidebar ul li a {
+  color: inherit;
+  color: white; /* Explicitly set to white */
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 15px 20px;
+}
+
+.sidebar ul li {
+  padding: 0;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  form {
+    width: 90%;
+  }
+}

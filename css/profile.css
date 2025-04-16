@@ -1,0 +1,263 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #342f2d;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.sidebar ul li a {
+  color: inherit;
+  color: white;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 15px 20px;
+}
+
+.sidebar ul li {
+  padding: 0;
+  text-decoration: none;
+}
+
+.profile img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.menu-item {
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #856d5c;
+  border-radius: 5px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #fafafa;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quick-access-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.quick-access-cards a {
+  text-decoration: none;
+  color: white;
+}
+
+.eventsCard,
+.groupsCard,
+.friendsCard,
+.closetCard,
+.friendsCard {
+  flex: 1;
+  background: #856d5c;
+  padding: 20px;
+  color: white;
+  border-radius: 8px;
+  margin: 20px 0;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.eventsCard:hover,
+.groupsCard:hover,
+.friendsCard:hover,
+.closetCard:hover,
+.friendsCard:hover {
+  background: #342f2d;
+}
+
+/* my-profile.php styles */
+.profile-form {
+  max-width: 500px;
+  height: auto;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 80px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.profile-label {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.profile-input,
+.profile-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.profile-textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.profile-button,
+.changepw-button {
+  background-color: #856d5c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.profile-button:hover,
+.changepw-button:hover {
+  background-color: #342f2d;
+}
+
+/* my-groups.php styles */
+.group-links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: auto;
+}
+
+.group-button {
+  text-decoration: none;
+}
+
+.group-button button {
+  background-color: #856d5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.group-button button:hover {
+  background-color: #342f2d;
+}
+
+/* my-events.php styles */
+.event-button {
+  background-color: #856d5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+}
+
+.event-button:hover {
+  background-color: #342f2d;
+}
+
+.no-events {
+  font-style: italic;
+  color: #555;
+}
+
+.event-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.event-form input[type="text"],
+.event-form input[type="datetime-local"],
+.event-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.event-form textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: #856d5c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #342f2d;
+}
+
+.submit-button {
+  margin-top: 10px;
+}
