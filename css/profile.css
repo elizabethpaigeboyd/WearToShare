@@ -16,6 +16,10 @@ h2 {
   color: white;
   padding: 20px;
   height: 100vh;
+  height: 100vh;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
 }
 
 .sidebar ul {
@@ -260,4 +264,112 @@ header {
 
 .submit-button {
   margin-top: 10px;
+}
+
+.alert {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.faq-section {
+  max-width: 800px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faq-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.faq-card:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.faq-card summary {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #342f2d;
+  cursor: pointer;
+  outline: none;
+  list-style: none;
+  position: relative;
+}
+
+.faq-card summary::after {
+  content: "+";
+  float: right;
+  font-size: 1.2rem;
+  color: #856d5c;
+  transition: all 0.3s ease;
+}
+
+.faq-card details[open] summary::after {
+  content: "−"; /* this is the actual minus sign (not a hyphen) */
+}
+
+.faq-card .answer {
+  margin-top: 15px;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.poll-box {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.poll-box img {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out;
+}
+.poll-box img:hover {
+  transform: scale(1.05);
+}
+
+.email-share-button {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  background-color: #856d5c;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.email-share-button:hover {
+  background-color: #333;
 }

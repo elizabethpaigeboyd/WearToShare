@@ -146,12 +146,52 @@ h1 {
 }
 
 /* about section */
+.about-text1,
+.about-text2,
+.about-text3,
+.about-text4 {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #342f2d;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #f0f0f0;
+}
+
 .about-text1 p,
 .about-text2 p,
 .about-text3 p,
 .about-text4 p {
-  background-color: #242f2f70;
-  padding: 25px;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.about-text1,
+.about-text2,
+.about-text3,
+.about-text4 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.about-text2 {
+  animation-delay: 0.1s;
+}
+.about-text3 {
+  animation-delay: 0.2s;
+}
+.about-text4 {
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* contact forms */
