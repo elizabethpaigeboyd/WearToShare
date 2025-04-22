@@ -61,15 +61,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-    <label>Current Password:</label><br>
-    <input type="password" name="current_password" required><br><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="css/profile.css">
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100"
+      rel="stylesheet"
+    />
+</head>
+<body>
+    <?php include 'sidebar.php';?>
 
-    <label>New Password:</label><br>
-    <input type="password" name="new_password" required><br><br>
+    <div class="main-content">
+        <h2>Change Password</h2>
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+        <label>Current Password:</label><br>
+        <input type="password" name="current_password" required><br><br>
 
-    <label>Confirm New Password:</label><br>
-    <input type="password" name="confirm_password" required><br><br>
+        <label>New Password:</label><br>
+        <input type="password" name="new_password" required><br><br>
 
-    <input type="submit" value="Change Password">
-</form>
+        <label>Confirm New Password:</label><br>
+        <input type="password" name="confirm_password" required><br><br>
+
+        <input type="submit" value="Change Password">
+        </form>
+    </div>
+</body>
+</html>
+
