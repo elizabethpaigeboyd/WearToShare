@@ -1,5 +1,4 @@
 <?php
-// error messages
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -7,117 +6,124 @@ error_reporting(E_ALL);
 include '/home/epboyd/db.php';
 session_start();
 
-// check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
+$original_sender = $_SESSION['user_id'];
 
-// approve or reject friend requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['friend_id'])) {
-    $friend_id = intval($_POST['friend_id']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sending a friend request
+    if (isset($_POST['friendship_code'])) {
+        $code = trim($_POST['friendship_code']);
 
-    if (isset($_POST['approve'])) {
-        $stmt = $conn->prepare("UPDATE friendships SET status = 'accepted' 
-            WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)) AND status = 'pending'");
-        $stmt->bind_param("iiii", $user_id, $friend_id, $friend_id, $user_id);
-    } elseif (isset($_POST['reject'])) {
-        $stmt = $conn->prepare("UPDATE friendships SET status = 'rejected' 
-            WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)) AND status = 'pending'");
-        $stmt->bind_param("iiii", $user_id, $friend_id, $friend_id, $user_id);
-    }
-
-    if ($stmt->execute()) {
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit;
-    } else {
-        echo "<p style='color: red;'>Error updating friend request: " . $stmt->error . "</p>";
-    }
-}
-
-// send a friend request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['friendship_code'])) {
-    $friendship_code = trim($_POST['friendship_code']);
-
-    if (!empty($friendship_code)) {
         $stmt = $conn->prepare("SELECT user_id FROM users WHERE friendship_code = ?");
-        $stmt->bind_param("s", $friendship_code);
+        $stmt->bind_param("s", $code);
         $stmt->execute();
         $result = $stmt->get_result();
+        $friend = $result->fetch_assoc();
 
-        if ($result->num_rows === 0) {
-            echo "<p style='color: red;'>Invalid friendship code.</p>";
+        if (!$friend) {
+            $_SESSION['message'] = ['type' => 'error', 'text' => 'No user found with that friendship code.'];
         } else {
-            $friend = $result->fetch_assoc();
-            $friend_user_id = $friend['user_id'];
+            $friend_id = $friend['user_id'];
 
-            // prevent self-friending
-            if ($friend_user_id === $user_id) {
-                echo "<p style='color: red;'>You can't send a friend request to yourself.</p>";
+            if ($friend_id == $user_id) {
+                $_SESSION['message'] = ['type' => 'warning', 'text' => "You can't send a friend request to yourself!"];
             } else {
-                $stmt = $conn->prepare("SELECT friendship_id FROM friendships 
-                    WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?) 
-                    AND status IN ('accepted', 'pending')");
-                $stmt->bind_param("iiii", $user_id, $friend_user_id, $friend_user_id, $user_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
+                $check = $conn->prepare("SELECT * FROM friendships WHERE 
+                    (user_id = ? AND friend_id = ?) OR 
+                    (user_id = ? AND friend_id = ?)");
+                $check->bind_param("iiii", $user_id, $friend_id, $friend_id, $user_id);
+                $check->execute();
+                $existing = $check->get_result();
 
-                if ($result->num_rows > 0) {
-                    echo "<p style='color: red;'>You are already friends or have a pending request with this user.</p>";
+                if ($existing->num_rows > 0) {
+                    $_SESSION['message'] = ['type' => 'warning', 'text' => 'You already have a pending or existing friendship with this user.'];
                 } else {
-                    // Ensure user_id is less than friend_id
-                    if ($user_id > $friend_user_id) {
-                        // Swap user_id and friend_id
-                        list($user_id, $friend_user_id) = array($friend_user_id, $user_id);
+                    if ($user_id > $friend_id) {
+                        [$user_id, $friend_id] = [$friend_id, $user_id];
                     }
 
-                    $stmt = $conn->prepare("INSERT INTO friendships (user_id, friend_id, status) VALUES (?, ?, 'pending')");
-                    $stmt->bind_param("ii", $user_id, $friend_user_id);
+                    $insert = $conn->prepare("INSERT INTO friendships (user_id, friend_id, status, requested_by) VALUES (?, ?, 'pending', ?)");
+                    $insert->bind_param("iii", $user_id, $friend_id, $original_sender);
 
-                    if ($stmt->execute()) {
-                        echo "<p>Friend request sent successfully!</p>";
+                    if ($insert->execute()) {
+                        $_SESSION['message'] = ['type' => 'success', 'text' => 'Friend request sent successfully!'];
                     } else {
-                        echo "<p style='color: red;'>Error sending friend request: " . $stmt->error . "</p>";
+                        $_SESSION['message'] = ['type' => 'error', 'text' => 'Failed to send request: ' . $insert->error];
                     }
-
                 }
-
             }
         }
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    }
+
+    // Approving a friend request
+    if (isset($_POST['approve'], $_POST['friend_id'])) {
+        $friend_id = $_POST['friend_id'];
+        $stmt = $conn->prepare("UPDATE friendships SET status = 'accepted' 
+            WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?))");
+        $stmt->bind_param("iiii", $friend_id, $user_id, $user_id, $friend_id);
+        $stmt->execute();
+        $_SESSION['message'] = ['type' => 'success', 'text' => 'Friend request approved!'];
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    }
+
+    // Rejecting a friend request
+    if (isset($_POST['reject'], $_POST['friend_id'])) {
+        $friend_id = $_POST['friend_id'];
+
+        $userA = min($user_id, $friend_id);
+        $userB = max($user_id, $friend_id);
+
+        $stmt = $conn->prepare("UPDATE friendships 
+            SET status = 'blocked' 
+            WHERE user_id = ? AND friend_id = ?");
+        $stmt->bind_param("ii", $userA, $userB);
+        $stmt->execute();
+
+        $_SESSION['message'] = ['type' => 'error', 'text' => 'Friend request rejected (blocked).'];
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
     }
 }
 
 // get accepted friends
-$stmt = $conn->prepare("
-    SELECT DISTINCT users.user_id, users.friendship_code, users.username 
-    FROM friendships 
-    JOIN users ON users.user_id = CASE 
-        WHEN friendships.user_id = ? THEN friendships.friend_id 
-        ELSE friendships.user_id 
-    END
-    WHERE (friendships.user_id = ? OR friendships.friend_id = ?) 
-    AND friendships.status = 'accepted'
-");
+$query = "
+    SELECT u.username 
+    FROM friendships f 
+    JOIN users u ON 
+        (f.friend_id = u.user_id AND f.user_id = ?) OR 
+        (f.user_id = u.user_id AND f.friend_id = ?)
+    WHERE f.status = 'accepted' AND (f.user_id = ? OR f.friend_id = ?)
+";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("iiii", $user_id, $user_id, $user_id, $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$friends = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
+// get pending requests (received)
+$sql = "
+    SELECT u.user_id, u.username
+    FROM friendships f
+    JOIN users u ON f.requested_by = u.user_id
+    WHERE 
+        f.status = 'pending'
+        AND ((f.user_id = ? OR f.friend_id = ?) AND f.requested_by != ?)
+";
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("iii", $user_id, $user_id, $user_id);
 $stmt->execute();
-$friends = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-// get pending requests
-// Get pending friend requests where the logged-in user is the recipient (Person B)
-$stmt = $conn->prepare("
-    SELECT users.user_id, users.friendship_code, users.username 
-    FROM friendships 
-    JOIN users ON (friendships.user_id = users.user_id OR friendships.friend_id = users.user_id) 
-    WHERE friendships.status = 'pending' 
-    AND ((friendships.user_id = ? AND friendships.friend_id = ?) OR (friendships.user_id = ? AND friendships.friend_id = ?))
-    AND users.user_id != ? 
-");
-$stmt->bind_param("iiiii", $user_id, $user_id, $user_id, $user_id, $user_id);
-$stmt->execute();
-$pending_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
+$result = $stmt->get_result();
+$pending_requests = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -133,6 +139,13 @@ $pending_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
+        <?php if (isset($_SESSION['message'])): ?>
+            <div class="alert <?php echo $_SESSION['message']['type']; ?>">
+                <?php echo htmlspecialchars($_SESSION['message']['text']); ?>
+            </div>
+            <?php unset($_SESSION['message']); ?>
+        <?php endif; ?>
+
         <h2>My Friends</h2>
         <div class="friend-links">
             <?php if (!empty($friends)): ?>
@@ -163,7 +176,6 @@ $pending_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <p>No pending friend requests.</p>
             <?php endif; ?>
         </div>
-
 
         <hr>
 

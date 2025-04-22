@@ -17,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // get user details
-$query = "SELECT username, email, nickname, bio FROM users WHERE user_id = ?";
+$query = "SELECT username, email, nickname, bio, friendship_code FROM users WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -42,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error updating profile.";
         }
     }
+
 }
 ?>
 
@@ -76,9 +77,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="profile-label">Bio:</label>
             <textarea name="bio" class="profile-textarea"><?php echo htmlspecialchars(isset($user['bio']) ? $user['bio'] : ''); ?></textarea><br>
 
+            <label class="profile-label">Friendship Code:</label>
+            <input type="text" name="friendship_code" value="<?php echo htmlspecialchars(isset($user['friendship_code']) ? $user['friendship_code'] : ''); ?>" class="profile-input" readonly><br>
+
+            <?php
+            $friendship_code = htmlspecialchars($user['friendship_code']);
+            $email_subject = rawurlencode("Add me on WearToShare!");
+            $email_body = rawurlencode("Hey! Here's my friendship code for WearToShare: $friendship_code\n\nUse it to send me a friend request!\nhttps://turing2.cs.olemiss.edu/~epboyd/WearToShare/");
+            ?>
+            <a href="mailto:?subject=<?php echo $email_subject; ?>&body=<?php echo $email_body; ?>" class="email-share-button">Share Friendship Code via Email</a>
+
             <button type="submit" name="update_profile" class="profile-button">Update Profile</button><br><br>
             <button name="changepw-button"id="changepw-button" class="changepw-button">Change Password</button>
         </form>
+
     </div>
 <script>
     const button = document.getElementById('changepw-button'); 

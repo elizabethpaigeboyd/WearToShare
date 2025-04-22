@@ -23,12 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
     $event_description = trim($_POST['event_description']);
 
     if (!empty($event_name) && !empty($event_date)) {        
+        // Insert the event into the events table
         $stmt = $conn->prepare("INSERT INTO events (event_name, event_date, event_location, event_description, organizer_id) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssi", $event_name, $event_date, $event_location, $event_description, $user_id);
-        
         $stmt->execute(); 
+
+        // Get the ID of the newly created event
+        $event_id = $conn->insert_id;
+        $stmt->close();
+
+        // Insert the user as an admin into event_participants
+        $stmt = $conn->prepare("INSERT INTO event_participants (event_id, user_id, user_role) VALUES (?, ?, 'admin')");
+        $stmt->bind_param("ii", $event_id, $user_id);
+        $stmt->execute();
         $stmt->close();
         
+        // Redirect back to the user's event page
         header("Location: https://turing2.cs.olemiss.edu/~epboyd/WearToShare/my-events.php");
         exit();
     }
