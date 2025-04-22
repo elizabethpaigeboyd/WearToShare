@@ -22,6 +22,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <li class="menu-item <?php echo ($current_page == 'help.php') ? 'active' : ''; ?>">
       <a href="help.php">Help/FAQs</a>
     </li>
+    <li class="menu-item <?php echo ($current_page == 'changePassword.php') ? 'active' : ''; ?>">
+      <a href="changePassword.php">Change Password</a>
+    </li>
     <li class="menu-item">
       <a href="logout.php">Log Out</a>
     </li>
